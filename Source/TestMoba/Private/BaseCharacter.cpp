@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "BaseCharacter.h"
@@ -9,6 +9,10 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Skills/Meathook.h"
+#include "Skills/Dismember.h"
+#include "../TestMobaPlayerController.h"
+#include "TestMoba/TestMobaGameMode.h"
 #include "Materials/Material.h"
 #include "Engine/World.h"
 
@@ -44,19 +48,77 @@ ABaseCharacter::ABaseCharacter()
 
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
-	PrimaryActorTick.bStartWithTickEnabled = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;	
 
+	_playerController = Cast<ATestMobaPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+
+	UMeatHook* obj = CreateDefaultSubobject<UMeatHook>(TEXT("MeatHook"));
+	_skillsSet.Add(obj);
+	UDismember* obj2 = CreateDefaultSubobject<UDismember>(TEXT("Dismember"));
+	_skillsSet.Add(obj2);
 }
 
-void ABaseCharacter::CastSkill() {
-	return;
+void ABaseCharacter::CastSkill(int skillPlace) {
+	if (_skillsSet.IsValidIndex(skillPlace)&& _playerController != NULL) {
+		_playerController->GetHitResultUnderCursor(ECollisionChannel::ECC_PhysicsBody, true, _hitResult);
+		_skillsSet[skillPlace]->SCast(&_hitResult);
+	}
+}
+
+void ABaseCharacter::AimSkill(int skillPlace) {
+	if (_skillsSet.IsValidIndex(skillPlace) && _playerController != NULL) {
+		_playerController->GetHitResultUnderCursor(ECollisionChannel::ECC_PhysicsBody, true, _hitResult);
+
+		_mouseNormal = (FVector2D(_hitResult.Location) - FVector2D(GetActorLocation())).GetSafeNormal();
+		auto some = FMath::Sign(_mouseNormal.X);
+		degree = FMath::Acos(FVector2D::DotProduct(FVector2D(1, 0), FVector2D(_mouseNormal.Y, _mouseNormal.X)));
+		some > 0 ? _rotator = -degree : _rotator = degree;
+
+		switch (_skillsSet[skillPlace]->_type)
+		{
+		case SkillType::ST_Passive:
+
+			break;
+		case SkillType::ST_Skillshot:
+			
+			break;
+		case SkillType::ST_Area:
+			
+			break;
+		case SkillType::ST_Targeted:
+			
+			break;
+		default:
+			break;
+		}
+	}
+		
+	
+}
+
+int ABaseCharacter::GetSkillSetSize()
+{
+	return _skillsSet.Num();
 }
 
 // Called every frame
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	//--------------------- ДЛЯ ДЕБАГУ
+	if (_playerController != NULL) {
+		//_playerController->GetHitResultUnderCursor(ECollisionChannel::ECC_PhysicsBody, true, _hitResult);
+		
 
+
+			
+		//if(TESTER){
+		//TESTER->SetActorRotation(FQuat(TESTER->GetActorUpVector(), _rotator));
+			
+		
+		//}
+	}
+	//---------------------------------
 	//Player stats handler
 	_health < _healthPool ? _health += (_healthRegen * DeltaTime) : _health +=0 ;
 	_mana < _manaPool ? _mana += (_manaRegen * DeltaTime) : _mana += 0;

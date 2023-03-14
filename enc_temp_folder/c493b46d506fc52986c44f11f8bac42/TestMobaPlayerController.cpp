@@ -50,6 +50,8 @@ void ATestMobaPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Triggered, this, &ATestMobaPlayerController::OnSetDestinationTriggered);
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Completed, this, &ATestMobaPlayerController::OnSetDestinationReleased);
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Canceled, this, &ATestMobaPlayerController::OnSetDestinationReleased);
+		
+		
 
 		BindSkillInput(EnhancedInputComponent, SetFirstSkillhAction, &ATestMobaPlayerController::AimSkillTemplate<KeyInputType::KI_First>, &ATestMobaPlayerController::CastSkillTemplate<KeyInputType::KI_First>);
 

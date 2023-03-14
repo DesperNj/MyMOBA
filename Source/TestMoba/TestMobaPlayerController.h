@@ -68,6 +68,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 		class UInputAction* SetUltimateSkillAction;
 
+	template<KeyInputType type>
+	void CastSkillTemplate() {
+		CastSkill(type);
+	}
+
+	template<KeyInputType type>
+	void AimSkillTemplate() {
+		AimSkill(type);
+	}
 	DECLARE_DELEGATE_OneParam(_inputDelegate, int32);
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
@@ -91,15 +100,8 @@ protected:
 private:
 	FVector CachedDestination;
 
-	template<KeyInputType type>
-	void CastSkillTemplate() {
-		CastSkill(type);
-	}
 
-	template<KeyInputType type>
-	void AimSkillTemplate() {
-		AimSkill(type);
-	}
+	void BindSkillInput(UEnhancedInputComponent* inputComponent, UInputAction* controller, void(ATestMobaPlayerController::* Aim)(), void(ATestMobaPlayerController::* Cast)());
 
 	bool bIsTouch; // Is it a touch device
 	float FollowTime; // For how long it has been pressed

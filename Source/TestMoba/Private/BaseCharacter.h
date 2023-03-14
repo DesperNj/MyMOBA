@@ -3,9 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Skill.h"
+#include "Skills/Skill.h"
 #include "GameFramework/Character.h"
+#include <Kismet/KismetMathLibrary.h>
+#include <Kismet/GameplayStatics.h>
 #include "BaseCharacter.generated.h"
+
+class ATestMobaPlayerController;
 
 UCLASS(Blueprintable)
 class ABaseCharacter : public ACharacter
@@ -23,10 +27,12 @@ public:
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	void CastSkill();
+	void AimSkill(int skillPlace);
+	void CastSkill(int skillPlace);
+	int GetSkillSetSize();
 protected:
-	UPROPERTY(EditAnywhere)
-		TArray<ASkill*> _skillsSet;
+		UPROPERTY(EditAnywhere)
+		TArray<USkill*> _skillsSet;
 
 		float _health = 300;
 
@@ -44,6 +50,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 		float _manaRegen = 0.15f;
 
+	
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -53,4 +60,12 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* CameraBoom;
 	
+	UPROPERTY(VisibleAnywhere)
+		ATestMobaPlayerController* _playerController;
+
+	double degree;
+	float _rotator;
+	FVector2D _mouseNormal;
+
+	FHitResult _hitResult;
 };
