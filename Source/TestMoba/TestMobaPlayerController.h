@@ -12,14 +12,9 @@
 class UNiagaraSystem;
 
 
-UENUM(BlueprintType)
-enum class KeyInputType : uint8 {
-	KI_First UMETA(DisplayName = "First skill"),
-	KI_Second UMETA(DisplayName = "Second skill"),
-	KI_Third UMETA(DisplayName = "Third skill"),
-	KI_Fourth UMETA(DisplayName = "Fourth skill"),
-	KI_Fifth UMETA(DisplayName = "Fifth skill"),
-	KI_Ult UMETA(DisplayName = "Ultimate skill"),
+enum ActionType {
+	AIM,
+	CAST
 };
 
 UCLASS()
@@ -43,6 +38,10 @@ public:
 	class UInputMappingContext* DefaultMappingContext;
 	
 	/** Jump Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+		class UInputAction* SetSkillAction;
+
+	/** Jump Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* SetDestinationClickAction;
 
@@ -50,33 +49,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* SetDestinationTouchAction;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* SetFirstSkillhAction;
+	UPROPERTY(VisibleAnywhere)
+		FVector2D TEST;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* SetSecondSkillAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* SetThirdSkillAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* SetFourthSkillAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* SetFifthSkillAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-		class UInputAction* SetUltimateSkillAction;
-
-	template<KeyInputType type>
-	void CastSkillTemplate() {
-		CastSkill(type);
+	template<ActionType type>
+	void ProceedSkill(const FInputActionValue& Value){
+		ProceedSkillLogic(Value, type);
 	}
 
-	template<KeyInputType type>
-	void AimSkillTemplate() {
-		AimSkill(type);
-	}
 	DECLARE_DELEGATE_OneParam(_inputDelegate, int32);
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
@@ -87,22 +67,16 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
-	/** Input handlers for SetDestination action. */
-	
 	void OnInputStarted();
 	void OnSetDestinationTriggered();
 	void OnSetDestinationReleased();
 	void OnTouchTriggered();
 	void OnTouchReleased();
-	void CastSkill(KeyInputType type);
-	void AimSkill(KeyInputType type);
-
+	void ProceedSkillLogic(const FInputActionValue& Value, ActionType type);
 private:
 	FVector CachedDestination;
-
-
-	void BindSkillInput(UEnhancedInputComponent* inputComponent, UInputAction* controller, void(ATestMobaPlayerController::* Aim)(), void(ATestMobaPlayerController::* Cast)());
-
+	UEnhancedInputComponent* EnhancedInputComponent;
+	int lastAimedIndex = 0;
 	bool bIsTouch; // Is it a touch device
 	float FollowTime; // For how long it has been pressed
 };
