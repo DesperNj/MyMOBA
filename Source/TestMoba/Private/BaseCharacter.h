@@ -30,6 +30,9 @@ public:
 	void AimSkill(int skillPlace);
 	void CastSkill(int skillPlace);
 	int GetSkillSetSize();
+	
+	//template<UActorComponent*
+
 protected:
 		UPROPERTY(EditAnywhere)
 		TArray<USkill*> _skillsSet;
@@ -62,6 +65,9 @@ private:
 	
 	UPROPERTY(VisibleAnywhere)
 		ATestMobaPlayerController* _playerController;
+
+	UPROPERTY(VisibleAnywhere)
+		FVector2D TEST;
 
 	double degree;
 	float _rotator;

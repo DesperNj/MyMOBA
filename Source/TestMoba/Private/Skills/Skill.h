@@ -26,7 +26,7 @@ public:
 	// Sets default values for this component's properties
 	USkill();
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere)
 		ABaseCharacter* _owner;
 
 	UPROPERTY(EditAnywhere)
@@ -36,7 +36,13 @@ public:
 		float _cooldown = 10.0f;
 
 	UPROPERTY(EditAnywhere)
+		float _range = 1800.0f;
+
+	UPROPERTY(EditAnywhere)
 		int _manacost = 25;
+
+	UPROPERTY(VisibleAnywhere)
+		float _projectileSpeed= 20;
 
 	UPROPERTY(EditAnywhere)
 		SkillType _type = SkillType::ST_Skillshot;
@@ -46,7 +52,6 @@ public:
 	void SCast(FHitResult* _hit);
 
 protected:
-
 	virtual void PassiveLogic() { return; }
 	virtual void MovementLogic() { return; }
 	virtual void SkillshotLogic(FVector2D direction) { return; }
@@ -56,10 +61,9 @@ protected:
 	
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+	
 		
 };

@@ -10,11 +10,7 @@ USkill::USkill()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	
-	_owner = Cast<ABaseCharacter>(GetOwner());
 }
-
 
 void USkill::SCast(FHitResult* hit)
 {
@@ -36,17 +32,15 @@ void USkill::SCast(FHitResult* hit)
 		default:
 			break;
 		}
-		_reloadTime += _cooldown;
+		//_reloadTime += _cooldown;
 	}
 }
 
 // Called when the game starts
 void USkill::BeginPlay()
 {
-	Super::BeginPlay();
-
-	// ...
-	
+	Super::BeginPlay();	
+	_owner = Cast<ABaseCharacter>(GetOwner());
 }
 
 
@@ -55,6 +49,7 @@ void USkill::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponent
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	_reloadTime > 0 ? _reloadTime -= DeltaTime : _reloadTime -= 0;
+	//_reloadTime > 0 ? _reloadTime -= DeltaTime : _reloadTime -= 0;
+	_reloadTime = 0.0f;
 }
 

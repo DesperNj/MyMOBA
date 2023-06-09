@@ -51,11 +51,6 @@ ABaseCharacter::ABaseCharacter()
 	PrimaryActorTick.bStartWithTickEnabled = true;	
 
 	_playerController = Cast<ATestMobaPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-
-	UMeatHook* obj = CreateDefaultSubobject<UMeatHook>(TEXT("MeatHook"));
-	_skillsSet.Add(obj);
-	UDismember* obj2 = CreateDefaultSubobject<UDismember>(TEXT("Dismember"));
-	_skillsSet.Add(obj2);
 }
 
 void ABaseCharacter::CastSkill(int skillPlace) {
@@ -70,6 +65,7 @@ void ABaseCharacter::AimSkill(int skillPlace) {
 		_playerController->GetHitResultUnderCursor(ECollisionChannel::ECC_PhysicsBody, true, _hitResult);
 
 		_mouseNormal = (FVector2D(_hitResult.Location) - FVector2D(GetActorLocation())).GetSafeNormal();
+		TEST = _mouseNormal;
 		auto some = FMath::Sign(_mouseNormal.X);
 		degree = FMath::Acos(FVector2D::DotProduct(FVector2D(1, 0), FVector2D(_mouseNormal.Y, _mouseNormal.X)));
 		some > 0 ? _rotator = -degree : _rotator = degree;
@@ -105,20 +101,6 @@ int ABaseCharacter::GetSkillSetSize()
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//--------------------- ДЛЯ ДЕБАГУ
-	if (_playerController != NULL) {
-		//_playerController->GetHitResultUnderCursor(ECollisionChannel::ECC_PhysicsBody, true, _hitResult);
-		
-
-
-			
-		//if(TESTER){
-		//TESTER->SetActorRotation(FQuat(TESTER->GetActorUpVector(), _rotator));
-			
-		
-		//}
-	}
-	//---------------------------------
 	//Player stats handler
 	_health < _healthPool ? _health += (_healthRegen * DeltaTime) : _health +=0 ;
 	_mana < _manaPool ? _mana += (_manaRegen * DeltaTime) : _mana += 0;

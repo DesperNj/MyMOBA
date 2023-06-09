@@ -61,8 +61,8 @@ void ATestMobaPlayerController::ProceedSkillLogic(const FInputActionValue& Value
 	switch (type)
 	{
 	case AIM:
-		lastAimedIndex = Value.Get<float>();
-		character->AimSkill(Value.Get<float>());
+		lastAimedIndex = Value.Get<float>()-1;
+		character->AimSkill(lastAimedIndex);
 		break;
 	case CAST:
 		character->CastSkill(lastAimedIndex);
