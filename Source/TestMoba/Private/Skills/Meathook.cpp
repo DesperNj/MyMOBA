@@ -15,6 +15,7 @@ UMeatHook::UMeatHook() {
 	USkill::affectTeammates = true;
 	USkill::_range = 900;
 	USkill::_projectileSpeed = 95;
+	USkill::_projectileSpeed = 950;
 	_meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hook"));
 	_meshComponent->SetUsingAbsoluteLocation(true);
 	_meshComponent->SetUsingAbsoluteRotation(true);
