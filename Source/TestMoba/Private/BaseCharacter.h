@@ -30,28 +30,27 @@ public:
 	void AimSkill(int skillPlace);
 	void CastSkill(int skillPlace);
 	int GetSkillSetSize();
-	
+	void LoadCharacterModel(FString name);
 	//template<UActorComponent*
 
+	UPROPERTY(EditAnywhere)
+	TArray<USkill*> _skillsSet = {};
+
 protected:
-		UPROPERTY(EditAnywhere)
-		TArray<USkill*> _skillsSet;
-
-		float _health = 300;
-
-		float _mana = 200;
+	UPROPERTY(EditAnywhere)
+	FString CharacterID = TEXT("");	
 
 	UPROPERTY(EditAnywhere)
-		float _healthPool = 300;
+	float _healthPool = 300;
 
 	UPROPERTY(EditAnywhere)
-		float _manaPool = 200;
+	float _manaPool = 200;
 
 	UPROPERTY(EditAnywhere)
-		float _healthRegen = 0.1f;
+	float _healthRegen = 0.1f;
 
 	UPROPERTY(EditAnywhere)
-		float _manaRegen = 0.15f;
+	float _manaRegen = 0.15f;
 
 	
 private:
@@ -66,12 +65,12 @@ private:
 	UPROPERTY(VisibleAnywhere)
 		ATestMobaPlayerController* _playerController;
 
-	UPROPERTY(VisibleAnywhere)
-		FVector2D TEST;
-
 	double degree;
 	float _rotator;
 	FVector2D _mouseNormal;
 
 	FHitResult _hitResult;
+
+		float _health = 300;
+		float _mana = 200;
 };

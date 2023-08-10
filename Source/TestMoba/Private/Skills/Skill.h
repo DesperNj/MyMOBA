@@ -16,7 +16,7 @@ enum class SkillType : uint8 {
 	ST_Movement UMETA(DisplayName = "Movement"),
 };
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Skills), meta=(BlueprintSpawnableComponent), Blueprintable)
 class USkill : public UActorComponent
 {
 	GENERATED_BODY()

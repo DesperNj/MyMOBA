@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(ClassGroup = (Skills), meta = (BlueprintSpawnableComponent), Blueprintable)
 class TESTMOBA_API UDismember : public USkill
 {
 	GENERATED_BODY()

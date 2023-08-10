@@ -19,8 +19,12 @@
 // Sets default values
 ABaseCharacter::ABaseCharacter()
 {
-	// Set size for player capsule
+	// Set size for player capsule and another adjustments
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+	GetMesh()->SetRelativeLocation(FVector(0, 0, -(GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight())));
+	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
+
+	//Setting up model
 
 	// Don't rotate character to camera direction
 	bUseControllerRotationPitch = false;
@@ -65,7 +69,6 @@ void ABaseCharacter::AimSkill(int skillPlace) {
 		_playerController->GetHitResultUnderCursor(ECollisionChannel::ECC_PhysicsBody, true, _hitResult);
 
 		_mouseNormal = (FVector2D(_hitResult.Location) - FVector2D(GetActorLocation())).GetSafeNormal();
-		TEST = _mouseNormal;
 		auto some = FMath::Sign(_mouseNormal.X);
 		degree = FMath::Acos(FVector2D::DotProduct(FVector2D(1, 0), FVector2D(_mouseNormal.Y, _mouseNormal.X)));
 		some > 0 ? _rotator = -degree : _rotator = degree;
@@ -95,6 +98,15 @@ void ABaseCharacter::AimSkill(int skillPlace) {
 int ABaseCharacter::GetSkillSetSize()
 {
 	return _skillsSet.Num();
+}
+
+void ABaseCharacter::LoadCharacterModel(FString name)
+{
+	FString path = "/Game/Characters/" + name + "/Meshes/" + name;
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> meshAsset(*path);
+	if (meshAsset.Object != nullptr) {
+		GetMesh()->SetSkeletalMeshAsset(meshAsset.Object);
+	}
 }
 
 // Called every frame
