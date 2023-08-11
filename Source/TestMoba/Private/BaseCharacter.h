@@ -31,10 +31,17 @@ public:
 	void CastSkill(int skillPlace);
 	int GetSkillSetSize();
 	void LoadCharacterModel(FString name);
-	//template<UActorComponent*
+	void PostActorCreated() override;
 
 	UPROPERTY(EditAnywhere)
-	TArray<USkill*> _skillsSet = {};
+	USkill* sonen;
+
+	//UPROPERTY(EditAnywhere, Instanced)
+	//TArray<USkill*> _skillsSet = {};
+
+	UPROPERTY(EditAnywhere)
+	TArray<TSubclassOf<USkill>> _skillsSet = {};
+	TArray<USkill*> _skillObjects;
 
 protected:
 	UPROPERTY(EditAnywhere)

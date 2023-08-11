@@ -55,12 +55,25 @@ ABaseCharacter::ABaseCharacter()
 	PrimaryActorTick.bStartWithTickEnabled = true;	
 
 	_playerController = Cast<ATestMobaPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+
+}
+
+void ABaseCharacter::PostActorCreated()
+{
+	for (auto skill : _skillsSet) {
+	//	auto obj = skill->StaticClass();
+		//auto debug = skill->GetDefaultObject();
+		//CreateDefaultSubobject<USkill*>(TEXT("some1"), USkill::StaticClass(), skill->StaticClass(), false, false);
+		//auto comp = CreateComponentFromTemplate(Cast<USkill>(skill->GetClass()));
+		//comp->GetOwner();
+		auto mine = NewObject<USkill>(this, skill);
+	}
 }
 
 void ABaseCharacter::CastSkill(int skillPlace) {
 	if (_skillsSet.IsValidIndex(skillPlace)&& _playerController != NULL) {
 		_playerController->GetHitResultUnderCursor(ECollisionChannel::ECC_PhysicsBody, true, _hitResult);
-		_skillsSet[skillPlace]->SCast(&_hitResult);
+		Cast<USkill>(_skillsSet[skillPlace]->GetDefaultObject())->SCast(&_hitResult);
 	}
 }
 
@@ -73,7 +86,7 @@ void ABaseCharacter::AimSkill(int skillPlace) {
 		degree = FMath::Acos(FVector2D::DotProduct(FVector2D(1, 0), FVector2D(_mouseNormal.Y, _mouseNormal.X)));
 		some > 0 ? _rotator = -degree : _rotator = degree;
 
-		switch (_skillsSet[skillPlace]->_type)
+		switch (Cast<USkill>(_skillsSet[skillPlace]->GetDefaultObject())->_type)
 		{
 		case SkillType::ST_Passive:
 
