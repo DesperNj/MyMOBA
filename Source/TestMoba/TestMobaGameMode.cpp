@@ -11,13 +11,10 @@ ATestMobaGameMode::ATestMobaGameMode()
 	// use our custom PlayerController class
 	PlayerControllerClass = ATestMobaPlayerController::StaticClass();
 
-	// set default pawn class to our Blueprinted character
-	//static AFisher PlayerClas = NewObject<AFisher>();
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/GameCharacters/cFisher"));
+	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Characters/Fisher/cFisher"));
 	if (PlayerPawnBPClass.Class != nullptr)
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
-		//DefaultPawnClass = AFisher::StaticClass();
 	}
 
 	// set default controller to our Blueprinted controller

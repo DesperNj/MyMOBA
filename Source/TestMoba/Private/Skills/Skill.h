@@ -16,54 +16,55 @@ enum class SkillType : uint8 {
 	ST_Movement UMETA(DisplayName = "Movement"),
 };
 
-UCLASS()
-class USkill : public UActorComponent
+UCLASS(HideDropdown)
+class ASkill : public AActor
 {
 	GENERATED_BODY()
 
-	float _reloadTime = 0.0f;
 public:	
 	// Sets default values for this component's properties
-	USkill();
+	ASkill();
 
-	UPROPERTY(EditAnywhere)
-		ABaseCharacter* _owner;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float _reloadTime = 0.0f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AActor* _owner;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString _name = "";
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float _cooldown = 10.0f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float _range = 1800.0f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int _manacost = 25;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		float _projectileSpeed= 20;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		SkillType _type = SkillType::ST_Skillshot;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool affectTeammates = false;
-	void SCast(FHitResult* _hit);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		bool _isSkillOnCast = false;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void SkillCast(FHitResult _hit);
 
 protected:
-	virtual void PassiveLogic() { return; }
-	virtual void MovementLogic() { return; }
-	virtual void SkillshotLogic(FVector2D direction) { return; }
-	virtual void AOELogic(FVector2D centreLocation) { return; }
-	//--------------------------------------------------- ОТУТА ПОМIНЯТИ НА ABaseCharacter
-	virtual void TargetedLogic(AActor* target) { return; }
 	
 	// Called when the game starts
 	virtual void BeginPlay() override;
 public:	
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void Tick(float DeltaTime) override;
 	
 		
 };

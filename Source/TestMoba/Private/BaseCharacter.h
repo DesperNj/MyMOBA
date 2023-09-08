@@ -32,16 +32,12 @@ public:
 	int GetSkillSetSize();
 	void LoadCharacterModel(FString name);
 	void PostActorCreated() override;
+	void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
-	USkill* sonen;
-
-	//UPROPERTY(EditAnywhere, Instanced)
-	//TArray<USkill*> _skillsSet = {};
-
+	TArray<TSubclassOf<ASkill>> _skillsSet = {};
 	UPROPERTY(EditAnywhere)
-	TArray<TSubclassOf<USkill>> _skillsSet = {};
-	TArray<USkill*> _skillObjects;
+	TArray<ASkill*> _skillObjects;
 
 protected:
 	UPROPERTY(EditAnywhere)
@@ -61,6 +57,14 @@ protected:
 
 	
 private:
+
+	template<typename T>
+	ASkill* CreateSkill(FName name) {
+		if (Cast<Uskill>(type)) {
+			return CreateDefaultSubobject<T>(name);
+		}
+	}
+
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* TopDownCameraComponent;
@@ -78,6 +82,7 @@ private:
 
 	FHitResult _hitResult;
 
-		float _health = 300;
-		float _mana = 200;
+	float _health = 300;
+	float _mana = 200;
 };
+

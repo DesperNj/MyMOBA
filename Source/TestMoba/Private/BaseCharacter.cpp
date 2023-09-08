@@ -9,8 +9,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Skills/Meathook.h"
-#include "Skills/Dismember.h"
 #include "../TestMobaPlayerController.h"
 #include "TestMoba/TestMobaGameMode.h"
 #include "Materials/Material.h"
@@ -55,25 +53,30 @@ ABaseCharacter::ABaseCharacter()
 	PrimaryActorTick.bStartWithTickEnabled = true;	
 
 	_playerController = Cast<ATestMobaPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-
 }
 
 void ABaseCharacter::PostActorCreated()
 {
 	for (auto skill : _skillsSet) {
-	//	auto obj = skill->StaticClass();
-		//auto debug = skill->GetDefaultObject();
-		//CreateDefaultSubobject<USkill*>(TEXT("some1"), USkill::StaticClass(), skill->StaticClass(), false, false);
-		//auto comp = CreateComponentFromTemplate(Cast<USkill>(skill->GetClass()));
-		//comp->GetOwner();
-		auto mine = NewObject<USkill>(this, skill);
+		if (skill != nullptr) {
+			auto skillObj = NewObject<ASkill>(this, skill, "Name");
+			skillObj->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+			_skillObjects.Push(skillObj);
+			// skillObj->AttachToComponent(this->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		}
 	}
+}
+
+void ABaseCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	
 }
 
 void ABaseCharacter::CastSkill(int skillPlace) {
 	if (_skillsSet.IsValidIndex(skillPlace)&& _playerController != NULL) {
 		_playerController->GetHitResultUnderCursor(ECollisionChannel::ECC_PhysicsBody, true, _hitResult);
-		Cast<USkill>(_skillsSet[skillPlace]->GetDefaultObject())->SCast(&_hitResult);
+		_skillObjects[skillPlace]->SkillCast(_hitResult);
 	}
 }
 
@@ -86,7 +89,7 @@ void ABaseCharacter::AimSkill(int skillPlace) {
 		degree = FMath::Acos(FVector2D::DotProduct(FVector2D(1, 0), FVector2D(_mouseNormal.Y, _mouseNormal.X)));
 		some > 0 ? _rotator = -degree : _rotator = degree;
 
-		switch (Cast<USkill>(_skillsSet[skillPlace]->GetDefaultObject())->_type)
+		switch (_skillObjects[skillPlace]->_type)
 		{
 		case SkillType::ST_Passive:
 
@@ -103,9 +106,7 @@ void ABaseCharacter::AimSkill(int skillPlace) {
 		default:
 			break;
 		}
-	}
-		
-	
+	}	
 }
 
 int ABaseCharacter::GetSkillSetSize()

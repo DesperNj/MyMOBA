@@ -1,54 +1,21 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "Skills/Skill.h"
+﻿#include "Skills/Skill.h"
 #include "TestMoba/Private/BaseCharacter.h"
 
-// Sets default values for this component's properties
-USkill::USkill()
+ASkill::ASkill()
 {
-	_owner = Cast<ABaseCharacter>(GetOwner());
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	SetActorTickEnabled(true);	
 }
 
-void USkill::SCast(FHitResult* hit)
+void ASkill::BeginPlay()
 {
-	if(_reloadTime <= 0){
-		switch (_type)
-		{
-		case SkillType::ST_Passive:
-			break;
-		case SkillType::ST_Skillshot:
-			SkillshotLogic(FVector2D(hit->Location));
-			break;
-		case SkillType::ST_Area:
-			AOELogic(FVector2D(hit->Location));
-			break;
-		case SkillType::ST_Targeted:
-			// ------------------------------------ А ОТУТА ЗРОБИТИ КАСТ ДО ABaseCharacter
-			TargetedLogic(hit->GetActor());
-			break;
-		default:
-			break;
-		}
-		//_reloadTime += _cooldown;
-	}
-}
-
-// Called when the game starts
-void USkill::BeginPlay()
-{
+	_owner = GetOwner();
 	Super::BeginPlay();	
 }
 
-
-// Called every frame
-void USkill::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void ASkill::Tick(float DeltaTime)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	Super::Tick(DeltaTime);
+	_owner = GetOwner();
 	//_reloadTime > 0 ? _reloadTime -= DeltaTime : _reloadTime -= 0;
 	_reloadTime = 0.0f;
 }
