@@ -31,13 +31,13 @@ public:
 	void CastSkill(int skillPlace);
 	int GetSkillSetSize();
 	void LoadCharacterModel(FString name);
-	void PostActorCreated() override;
 	void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
-	TArray<TSubclassOf<ASkill>> _skillsSet = {};
-	UPROPERTY(EditAnywhere)
 	TArray<ASkill*> _skillObjects;
+
+	void InitSkill(TSubclassOf<ASkill> skill);
+	void DeinitSkill(TSubclassOf<ASkill> skill);
 
 protected:
 	UPROPERTY(EditAnywhere)
@@ -60,7 +60,7 @@ private:
 
 	template<typename T>
 	ASkill* CreateSkill(FName name) {
-		if (Cast<Uskill>(type)) {
+		if (Cast<ASkill>(type)) {
 			return CreateDefaultSubobject<T>(name);
 		}
 	}

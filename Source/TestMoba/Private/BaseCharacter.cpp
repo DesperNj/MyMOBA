@@ -55,33 +55,32 @@ ABaseCharacter::ABaseCharacter()
 	_playerController = Cast<ATestMobaPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 }
 
-void ABaseCharacter::PostActorCreated()
+void ABaseCharacter::BeginPlay()
 {
-	for (auto skill : _skillsSet) {
-		if (skill != nullptr) {
-			auto skillObj = NewObject<ASkill>(this, skill, "Name");
-			skillObj->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
-			_skillObjects.Push(skillObj);
-			// skillObj->AttachToComponent(this->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
-		}
+	Super::BeginPlay();	
+}
+
+void ABaseCharacter::InitSkill(TSubclassOf<ASkill> skill)
+{
+	if (skill != nullptr) {
+		auto skillObj = GetWorld()->SpawnActor<ASkill>(skill);
+		skillObj->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 	}
 }
 
-void ABaseCharacter::BeginPlay()
+void ABaseCharacter::DeinitSkill(TSubclassOf<ASkill> skill)
 {
-	Super::BeginPlay();
-	
 }
 
 void ABaseCharacter::CastSkill(int skillPlace) {
-	if (_skillsSet.IsValidIndex(skillPlace)&& _playerController != NULL) {
+	if (_skillObjects.IsValidIndex(skillPlace)&& _playerController != NULL) {
 		_playerController->GetHitResultUnderCursor(ECollisionChannel::ECC_PhysicsBody, true, _hitResult);
 		_skillObjects[skillPlace]->SkillCast(_hitResult);
 	}
 }
 
 void ABaseCharacter::AimSkill(int skillPlace) {
-	if (_skillsSet.IsValidIndex(skillPlace) && _playerController != NULL) {
+	if (_skillObjects.IsValidIndex(skillPlace) && _playerController != NULL) {
 		_playerController->GetHitResultUnderCursor(ECollisionChannel::ECC_PhysicsBody, true, _hitResult);
 
 		_mouseNormal = (FVector2D(_hitResult.Location) - FVector2D(GetActorLocation())).GetSafeNormal();
@@ -111,7 +110,7 @@ void ABaseCharacter::AimSkill(int skillPlace) {
 
 int ABaseCharacter::GetSkillSetSize()
 {
-	return _skillsSet.Num();
+	return _skillObjects.Num();
 }
 
 void ABaseCharacter::LoadCharacterModel(FString name)
