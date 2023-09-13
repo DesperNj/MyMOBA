@@ -36,7 +36,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	TArray<ASkill*> _skillObjects;
 
-	void InitSkill(TSubclassOf<ASkill> skill);
+	UFUNCTION(BlueprintCallable)
+	bool InitSkill(TSubclassOf<ASkill> skill);
+	UFUNCTION(BlueprintCallable)
 	void DeinitSkill(TSubclassOf<ASkill> skill);
 
 protected:
@@ -55,6 +57,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float _manaRegen = 0.15f;
 
+	UPROPERTY(EditAnywhere)
+	int _skillSetSize = 4;
 	
 private:
 

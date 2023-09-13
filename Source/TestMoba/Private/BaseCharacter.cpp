@@ -60,12 +60,16 @@ void ABaseCharacter::BeginPlay()
 	Super::BeginPlay();	
 }
 
-void ABaseCharacter::InitSkill(TSubclassOf<ASkill> skill)
+bool ABaseCharacter::InitSkill(TSubclassOf<ASkill> skill)
 {
-	if (skill != nullptr) {
+	if (skill != nullptr && _skillObjects.Num() <_skillSetSize) {
 		auto skillObj = GetWorld()->SpawnActor<ASkill>(skill);
 		skillObj->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+		skillObj->_owner = this;
+		_skillObjects.Add(skillObj);
+		return true;
 	}
+	return false;
 }
 
 void ABaseCharacter::DeinitSkill(TSubclassOf<ASkill> skill)
