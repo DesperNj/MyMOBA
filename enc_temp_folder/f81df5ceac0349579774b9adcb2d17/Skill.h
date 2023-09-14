@@ -43,7 +43,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int _manacost = 25;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		float _projectileSpeed= 20;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

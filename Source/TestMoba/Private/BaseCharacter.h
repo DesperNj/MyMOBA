@@ -39,7 +39,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool InitSkill(TSubclassOf<ASkill> skill);
 	UFUNCTION(BlueprintCallable)
-	void DeinitSkill(TSubclassOf<ASkill> skill);
+	bool DeinitSkill(TSubclassOf<ASkill> skill);
 
 protected:
 	UPROPERTY(EditAnywhere)

@@ -72,8 +72,19 @@ bool ABaseCharacter::InitSkill(TSubclassOf<ASkill> skill)
 	return false;
 }
 
-void ABaseCharacter::DeinitSkill(TSubclassOf<ASkill> skill)
+bool ABaseCharacter::DeinitSkill(TSubclassOf<ASkill> skill)
 {
+	int pos = _skillObjects.IndexOfByPredicate(
+		[skill](const ASkill* Object) {
+			return Object->GetClass() == skill;
+		}
+	);
+	if (_skillObjects.IsValidIndex(pos)) {
+		_skillObjects[pos]->Destroy();
+		_skillObjects.RemoveAt(pos);
+		return true;
+	}
+	return false;
 }
 
 void ABaseCharacter::CastSkill(int skillPlace) {
