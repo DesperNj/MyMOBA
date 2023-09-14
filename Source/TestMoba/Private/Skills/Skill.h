@@ -28,7 +28,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float _reloadTime = 0.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		AActor* _owner;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -59,7 +59,10 @@ public:
 		float _castTime;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void SkillCast(FHitResult _hit);
+		void SkillCast(FHitResult _hit);
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnSkillInited();
 
 
 protected:

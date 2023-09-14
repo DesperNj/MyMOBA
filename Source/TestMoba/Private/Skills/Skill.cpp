@@ -4,6 +4,8 @@
 ASkill::ASkill()
 {
 	SetActorTickEnabled(true);	
+	auto debug = GetParentActor();
+	_owner = debug;
 }
 
 void ASkill::BeginPlay()
@@ -14,7 +16,8 @@ void ASkill::BeginPlay()
 
 void ASkill::PostActorCreated()
 {
-	_owner = GetParentActor();
+	auto debug = GetParentActor();
+	_owner = debug;
 }
 
 void ASkill::Tick(float DeltaTime)

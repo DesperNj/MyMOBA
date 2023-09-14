@@ -67,6 +67,7 @@ bool ABaseCharacter::InitSkill(TSubclassOf<ASkill> skill)
 		skillObj->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 		skillObj->_owner = this;
 		_skillObjects.Add(skillObj);
+		skillObj->OnSkillInited();
 		return true;
 	}
 	return false;
